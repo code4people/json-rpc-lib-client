@@ -1,13 +1,13 @@
 package com.nullables.jsonrpclib.client;
 
 import com.fasterxml.jackson.databind.node.TextNode;
-import com.pushpopsoft.jsonrpclib.binding.annotations.Bind;
-import com.pushpopsoft.jsonrpclib.binding.annotations.Param;
-import com.pushpopsoft.jsonrpclib.binding.annotations.ParamsType;
-import com.pushpopsoft.jsonrpclib.client.exceptions.ClientException;
-import com.pushpopsoft.jsonrpclib.client.exceptions.ReceiveException;
-import com.pushpopsoft.jsonrpclib.client.exceptions.ServerException;
-import com.pushpopsoft.jsonrpclib.client.messaging.MessageReceiver;
+import com.nullables.jsonrpclib.binding.annotations.Bind;
+import com.nullables.jsonrpclib.binding.annotations.Param;
+import com.nullables.jsonrpclib.binding.annotations.ParamsType;
+import com.nullables.jsonrpclib.client.exceptions.ClientException;
+import com.nullables.jsonrpclib.client.exceptions.ReceiveException;
+import com.nullables.jsonrpclib.client.exceptions.ServerException;
+import com.nullables.jsonrpclib.client.messaging.MessageReceiver;
 import org.junit.Test;
 
 import java.time.Duration;

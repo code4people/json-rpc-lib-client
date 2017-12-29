@@ -5,7 +5,7 @@ import com.nullables.jsonrpclib.client.serialization.MissingParamsSerializer;
 import com.nullables.jsonrpclib.client.serialization.NamedParamsSerializer;
 import com.nullables.jsonrpclib.client.serialization.PositionalParamsSerializer;
 import com.nullables.jsonrpclib.client.serialization.SingleArgumentParamsSerializer;
-import com.pushpopsoft.jsonrpclib.binding.info.NamedParamsInfo;
+import com.nullables.jsonrpclib.binding.info.NamedParamsInfo;
 
 import java.util.List;
 import java.util.stream.Collectors;

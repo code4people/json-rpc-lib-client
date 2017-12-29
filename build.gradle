@@ -3,7 +3,6 @@ version '0.0.1'
 
 apply plugin: 'java'
 apply plugin: 'maven'
-apply plugin: 'signing'
 
 sourceCompatibility = 1.8
 
@@ -39,53 +38,36 @@ artifacts {
     archives javadocJar, sourcesJar
 }
 
+task createPom << {
+    pom {
+        project {
+            name 'json-rpc-lib-client'
+            packaging 'jar'
+            description 'Client library for JSON-RPC'
+            url 'https://github.com/nullables/json-rpc-lib-client'
 
-signing {
-    sign configurations.archives
-}
-
-uploadArchives {
-    repositories {
-        mavenDeployer {
-            beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
-
-            repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
-                authentication(userName: ossrhUsername, password: ossrhPassword)
-            }
-
-            snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
-                authentication(userName: ossrhUsername, password: ossrhPassword)
-            }
-
-            pom.project {
-                name 'JSON-RPC Library Client'
-                packaging 'jar'
-                description 'JSON-RPC Library Client'
+            scm {
+                connection 'scm:git:git://github.com/nullables/json-rpc-lib-client.git'
+                developerConnection 'scm:git:ssh://github.com/nullables/json-rpc-lib-client.git'
                 url 'https://github.com/nullables/json-rpc-lib-client'
+            }
 
-                scm {
-                    connection 'scm:git:git://github.com/nullables/json-rpc-lib-client.git'
-                    developerConnection 'scm:git:ssh://github.com/nullables/json-rpc-lib-client.git'
-                    url 'https://github.com/nullables/json-rpc-lib-client'
+            licenses {
+                license {
+                    name 'The Apache License, Version 2.0'
+                    url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
                 }
+            }
 
-                licenses {
-                    license {
-                        name 'The Apache License, Version 2.0'
-                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-                    }
-                }
-
-                developers {
-                    developer {
-                        id 'mobratil'
-                        name 'Martin Obrátil'
-                        email 'martin.obratil@icloud.com'
-                        organization 'Nullables'
-                        organizationUrl 'https://www.nullables.com'
-                    }
+            developers {
+                developer {
+                    id 'mobratil'
+                    name 'Martin Obrátil'
+                    email 'martin.obratil@icloud.com'
+                    organization 'Nullables'
+                    organizationUrl 'https://www.nullables.com'
                 }
             }
         }
-    }
+    }.writeTo("$buildDir/poms/pom-default.xml")
 }
