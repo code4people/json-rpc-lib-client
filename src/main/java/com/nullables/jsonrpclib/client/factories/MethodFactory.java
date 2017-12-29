@@ -6,9 +6,9 @@ import com.nullables.jsonrpclib.client.processing.AsyncResponseProducer;
 import com.nullables.jsonrpclib.client.processing.RequestSender;
 import com.nullables.jsonrpclib.client.serialization.ParamsSerializer;
 import com.nullables.jsonrpclib.client.serialization.ResultDeserializer;
-import com.pushpopsoft.jsonrpclib.binding.info.GranularParamsMethodInfo;
-import com.pushpopsoft.jsonrpclib.binding.info.MethodInfo;
-import com.pushpopsoft.jsonrpclib.binding.info.SingleArgumentMethodInfo;
+import com.nullables.jsonrpclib.binding.info.GranularParamsMethodInfo;
+import com.nullables.jsonrpclib.binding.info.MethodInfo;
+import com.nullables.jsonrpclib.binding.info.SingleArgumentMethodInfo;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;

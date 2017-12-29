@@ -4,7 +4,7 @@ import com.nullables.jsonrpclib.client.dispatch.Method;
 import com.nullables.jsonrpclib.client.dispatch.MethodDispatcher;
 import com.nullables.jsonrpclib.client.dispatch.MethodLookup;
 import com.nullables.jsonrpclib.client.processing.AsyncResponseProducer;
-import com.pushpopsoft.jsonrpclib.binding.info.MethodInfo;
+import com.nullables.jsonrpclib.binding.info.MethodInfo;
 
 import java.util.List;
 import java.util.Map;

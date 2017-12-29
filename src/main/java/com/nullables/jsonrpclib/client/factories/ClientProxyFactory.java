@@ -1,6 +1,6 @@
 package com.nullables.jsonrpclib.client.factories;
 
-import com.pushpopsoft.jsonrpclib.binding.info.MethodInfo;
+import com.nullables.jsonrpclib.binding.info.MethodInfo;
 import com.nullables.jsonrpclib.client.dispatch.InvocationHandlerImpl;
 import com.nullables.jsonrpclib.client.dispatch.MethodDispatcher;
 import com.nullables.jsonrpclib.client.processing.AsyncResponseProducer;
