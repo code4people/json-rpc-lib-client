@@ -1,5 +1,8 @@
 package com.code4people.jsonrpclib.client.factories;
 
+import com.code4people.jsonrpclib.binding.factories.GranularParamsMethodInfoFactory;
+import com.code4people.jsonrpclib.binding.factories.MethodInfoFactory;
+import com.code4people.jsonrpclib.binding.factories.SingleArgumentMethodInfoFactory;
 import com.code4people.jsonrpclib.client.dispatch.MethodDispatcher;
 import com.code4people.jsonrpclib.binding.info.MethodInfo;
 import com.code4people.jsonrpclib.client.dispatch.InvocationHandlerImpl;
@@ -18,7 +21,10 @@ public class ClientProxyFactory {
 
     @SuppressWarnings("unchecked")
     public <T> T create(Class<T> clazz, AsyncResponseProducer asyncResponseProducer) {
-        List<? extends MethodInfo> methodInfos = MethodInfo.createFromClass(clazz);
+        GranularParamsMethodInfoFactory granularParamsMethodInfoFactory = new GranularParamsMethodInfoFactory();
+        SingleArgumentMethodInfoFactory singleArgumentMethodInfoFactory = new SingleArgumentMethodInfoFactory();
+        MethodInfoFactory methodInfoFactory = new MethodInfoFactory(granularParamsMethodInfoFactory, singleArgumentMethodInfoFactory);
+        List<? extends MethodInfo> methodInfos = methodInfoFactory.createFromClass(clazz);
         MethodDispatcher methodDispatcher = methodDispatcherFactory.createMethodDispatcher(methodInfos, asyncResponseProducer);
         InvocationHandlerImpl invocationHandler = new InvocationHandlerImpl(methodDispatcher);
 

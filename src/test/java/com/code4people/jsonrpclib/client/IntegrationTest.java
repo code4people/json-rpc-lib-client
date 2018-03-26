@@ -240,13 +240,13 @@ public class IntegrationTest {
     }
 
     public interface Contract {
-        @Bind(paramsTypes = ParamsType.POSITIONAL)
+        @Bind(paramsType = ParamsType.POSITIONAL)
         String method(String param);
 
-        @Bind(paramsTypes = ParamsType.POSITIONAL)
+        @Bind(paramsType = ParamsType.POSITIONAL)
         CompletableFuture<String> methodWithPositionalParamsAsync(String param);
 
-        @Bind(paramsTypes = ParamsType.NAMED)
+        @Bind(paramsType = ParamsType.NAMED)
         CompletableFuture<String> methodWithNamedParamsAsync(@Param("param") String param);
 
         CompletableFuture<String> notBoundMethodAsync(String param);
