@@ -62,6 +62,28 @@ public class IntegrationTest {
     }
 
     @Test
+    public void proxyCallAsync_shouldReturnResult_whenCalledWithMissingParams() {
+        ClientContextBuilder builder = new ClientContextBuilder();
+        builder.messageSender(m -> {
+            assertEquals("{\"jsonrpc\":\"2.0\",\"id\":\"1\",\"method\":\"methodWithMissingParamsAsync\"}", m);
+        });
+        builder.idGenerator(() -> "1");
+        ClientContext clientContext = builder.build();
+        Contract proxy = clientContext.createProxyOf(Contract.class);
+        Executors.newSingleThreadExecutor().submit(() -> {
+            try {
+                Thread.sleep(10);
+                clientContext.getMessageReceiver().receive("{\"jsonrpc\":\"2.0\",\"id\":\"1\",\"result\":\"result value\"}");
+            } catch (Exception ignored) { }
+        });
+
+        CompletableFuture<String> result = proxy.methodWithMissingParamsAsync();
+
+        assertEquals("result value", result.join());
+    }
+
+
+    @Test
     public void proxyCall_shouldReturnResult() {
         ClientContextBuilder builder = new ClientContextBuilder();
         builder.messageSender(m -> { });
@@ -248,6 +270,9 @@ public class IntegrationTest {
 
         @Bind(paramsType = ParamsType.NAMED)
         CompletableFuture<String> methodWithNamedParamsAsync(@Param("param") String param);
+
+        @Bind
+        CompletableFuture<String> methodWithMissingParamsAsync();
 
         CompletableFuture<String> notBoundMethodAsync(String param);
     }

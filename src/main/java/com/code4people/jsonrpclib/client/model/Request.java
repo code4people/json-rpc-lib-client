@@ -1,6 +1,7 @@
 package com.code4people.jsonrpclib.client.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.databind.JsonNode;
 
@@ -9,6 +10,7 @@ public class Request {
     private final String jsonrpc;
     private final Object id;
     private final String method;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private final JsonNode params;
 
     @JsonCreator
