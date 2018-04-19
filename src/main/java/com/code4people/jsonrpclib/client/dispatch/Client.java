@@ -19,23 +19,12 @@ public class Client {
     public Response send(Request request) {
         CompletableFuture<Response> responseCompletableFuture = asyncResponseProducer.produceAsyncResponse(request.getId());
         requestSender.send(request);
-        //try {
-            return responseCompletableFuture.join();
-        //} catch (CancellationException e) {
-        //    throw new ClientException("Invocation was cancelled.", e);
-        //} catch (CompletionException e) {
-        //    throw new ClientException("Invocation completed with exception.", e);
-        //}
+        return responseCompletableFuture.join();
     }
 
     public CompletableFuture<Response> sendAsync(Request request) {
         CompletableFuture<Response> responseCompletableFuture = asyncResponseProducer.produceAsyncResponse(request.getId());
         requestSender.send(request);
-//        return responseCompletableFuture.whenComplete((response, throwable) -> {
-//            if (throwable != null) {
-//                throw new ClientException("Invocation completed with exception.", throwable);
-//            }
-//        });
         return responseCompletableFuture;
     }
 }

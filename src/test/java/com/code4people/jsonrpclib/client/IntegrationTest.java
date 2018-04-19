@@ -18,7 +18,6 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 public class IntegrationTest {
-
     @Test
     public void proxyCallAsync_shouldReturnResult_whenCalledWithNamedParams() {
         ClientContextBuilder builder = new ClientContextBuilder();

@@ -15,6 +15,7 @@ import com.code4people.jsonrpclib.client.serialization.MessageSerializer;
 import java.time.Duration;
 import java.util.Objects;
 import java.util.UUID;
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 public class ClientContextBuilder {
@@ -25,6 +26,22 @@ public class ClientContextBuilder {
     public ClientContextBuilder messageSender(MessageSender messageSender) {
         Objects.requireNonNull(messageSender, "'messageSender' cannot be null");
         this.messageSender = messageSender;
+        return this;
+    }
+
+    public ClientContextBuilder messageSender(Consumer<String> messageSender) {
+        Objects.requireNonNull(messageSender, "'messageSender' cannot be null");
+        this.messageSender = new MessageSender() {
+            @Override
+            public void send(String message) {
+                messageSender.accept(message);
+            }
+
+            @Override
+            public void close() {
+
+            }
+        };
         return this;
     }
 
@@ -58,7 +75,7 @@ public class ClientContextBuilder {
                 idGenerator);
         MethodDispatcherFactory methodDispatcherFactory = new MethodDispatcherFactory(methodFactory);
         ClientProxyFactory clientProxyFactory = new ClientProxyFactory(methodDispatcherFactory);
-        return new ClientContext(messageReceiver, clientProxyFactory, responseBuffer);
+        return new ClientContext(messageReceiver, clientProxyFactory, responseBuffer, messageSender);
     }
 
 }
