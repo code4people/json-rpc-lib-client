@@ -28,6 +28,10 @@ public class ResultDeserializer {
     }
 
     public <T> T deserialize(JsonNode jsonNode, Type type) throws SerializationException {
+        if (type == void.class || type == Void.class) {
+            return null;
+        }
+
         try {
             JavaType javaType = typeFactory.constructType(type);
             return mapper.convertValue(jsonNode, javaType);

@@ -4,5 +4,5 @@ import java.io.Closeable;
 
 public interface MessageSender extends Closeable {
     void send(String message);
-    void close();
+    default void close() {}
 }

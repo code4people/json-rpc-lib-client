@@ -4,19 +4,24 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.JsonNode;
 
+import java.util.Objects;
+
 public class ResponseError {
 
     private final int code;
     private final String message;
     private final JsonNode data;
+    private final JsonNode debugErrorData;
 
     @JsonCreator
     public ResponseError(@JsonProperty("code") int code,
                          @JsonProperty("message") String message,
-                         @JsonProperty("data") JsonNode data) {
+                         @JsonProperty("data") JsonNode data,
+                         @JsonProperty("_debugErrorData") JsonNode debugErrorData) {
         this.code = code;
         this.message = message;
         this.data = data;
+        this.debugErrorData = debugErrorData;
     }
 
     public int getCode() {
@@ -31,23 +36,24 @@ public class ResponseError {
         return data;
     }
 
+    public JsonNode getDebugErrorData() {
+        return debugErrorData;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-
-        ResponseError error = (ResponseError) o;
-
-        if (code != error.code) return false;
-        if (message != null ? !message.equals(error.message) : error.message != null) return false;
-        return data != null ? data.equals(error.data) : error.data == null;
+        ResponseError that = (ResponseError) o;
+        return code == that.code &&
+                Objects.equals(message, that.message) &&
+                Objects.equals(data, that.data) &&
+                Objects.equals(debugErrorData, that.debugErrorData);
     }
 
     @Override
     public int hashCode() {
-        int result = code;
-        result = 31 * result + (message != null ? message.hashCode() : 0);
-        result = 31 * result + (data != null ? data.hashCode() : 0);
-        return result;
+
+        return Objects.hash(code, message, data, debugErrorData);
     }
 }

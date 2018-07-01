@@ -1,6 +1,7 @@
 package com.code4people.jsonrpclib.client.dispatch;
 
 import com.code4people.jsonrpclib.client.exceptions.ClientException;
+import com.code4people.jsonrpclib.client.exceptions.ExceptionMapper;
 import com.code4people.jsonrpclib.client.exceptions.ServerException;
 import com.code4people.jsonrpclib.client.model.Request;
 import com.code4people.jsonrpclib.client.serialization.ParamsSerializer;
@@ -11,6 +12,7 @@ import com.code4people.jsonrpclib.client.serialization.ResultDeserializer;
 
 import java.lang.reflect.Type;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionException;
 import java.util.function.Supplier;
 
 public class Method {
@@ -19,6 +21,7 @@ public class Method {
     private final ParamsSerializer paramsSerializer;
     private final ResultDeserializer resultDeserializer;
     private final Client client;
+    private final ExceptionMapper exceptionMapper;
     private final Supplier<? extends Object> idSupplier;
 
     public Method(String methodName,
@@ -26,12 +29,14 @@ public class Method {
                   ParamsSerializer paramsSerializer,
                   ResultDeserializer resultDeserializer,
                   Client client,
+                  ExceptionMapper exceptionMapper,
                   Supplier<? extends Object> idSupplier) {
         this.methodName = methodName;
         this.returnType = returnType;
         this.paramsSerializer = paramsSerializer;
         this.resultDeserializer = resultDeserializer;
         this.client = client;
+        this.exceptionMapper = exceptionMapper;
         this.idSupplier = idSupplier;
     }
 
@@ -46,7 +51,6 @@ public class Method {
             return failedCf;
         }
         Request request = new Request("2.0", methodName, idSupplier.get(), params);
-
         return client.sendAsync(request)
                 .thenApply(response -> {
                     if (response.getError() == null) {
@@ -56,8 +60,8 @@ public class Method {
                             throw new ClientException("Cannot deserialize result.", e);
                         }
                     } else {
-                        ResponseError responseError = response.getError();
-                        throw new ServerException(responseError.getCode(), responseError.getMessage(), responseError.getData());
+                        Throwable throwable = exceptionMapper.resolveException(response.getError());
+                        throw new CompletionException(throwable);
                     }
                 });
     }

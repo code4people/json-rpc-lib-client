@@ -21,7 +21,7 @@ public class MethodDispatcher {
         else {
             clientMethodOptional.get().invoke(args)
                 .whenComplete((o, throwable) -> {
-                    if (o != null) {
+                    if (throwable == null) {
                         cf.complete(o);
                     }
                     else if (throwable instanceof CompletionException && throwable.getCause() != null) {
