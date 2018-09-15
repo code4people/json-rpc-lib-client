@@ -255,7 +255,30 @@ public class IntegrationTest {
         });
 
         try {
-            proxy.methodThrowingCustomException("value");
+            proxy.methodThrowingCustomException1("value");
+        } catch (CustomException e) {
+            assertEquals("Error message", e.getMessage());
+        }
+    }
+
+    @Test
+    public void proxyCall_shouldThrowsCustomExceptionMappedOnClass_whenErrorResponseIsReceived() {
+        ClientContext clientContext = new ClientContextFactoryBuilder()
+                .idGenerator(() -> "1")
+                .addExceptionFactory(CustomException.class, re -> new CustomException(re.getMessage()))
+                .build()
+                .create(m -> {});
+        ContractThrowingException proxy = clientContext.createProxyOf(ContractThrowingException.class);
+        Executors.newSingleThreadExecutor().submit(() -> {
+            try {
+                Thread.sleep(10);
+                MessageReceiver messageReceiver = clientContext.getMessageReceiver();
+                messageReceiver.receive("{\"jsonrpc\":\"2.0\",\"id\":\"1\",\"error\":{\"code\":-32060,\"message\":\"Error message\",\"data\":\"data\"}}");
+            } catch (Exception ignored) { }
+        });
+
+        try {
+            proxy.methodThrowingCustomException2("value");
         } catch (CustomException e) {
             assertEquals("Error message", e.getMessage());
         }
@@ -342,12 +365,18 @@ public class IntegrationTest {
         CompletableFuture<String> notBoundMethodAsync(String param);
     }
 
+    @ErrorMapping({
+            @Error(code = -32060, exception = CustomException.class)
+    })
     public interface ContractThrowingException {
         @Bind(paramsType = ParamsType.POSITIONAL)
         @ErrorMapping({
                 @Error(code = -32050, exception = CustomException.class)
         })
-        String methodThrowingCustomException(String param) throws CustomException;
+        String methodThrowingCustomException1(String param) throws CustomException;
+
+        @Bind(paramsType = ParamsType.POSITIONAL)
+        String methodThrowingCustomException2(String param) throws CustomException;
     }
 
     public class CustomException extends Exception {
